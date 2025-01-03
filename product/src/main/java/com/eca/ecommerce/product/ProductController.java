@@ -14,6 +14,7 @@ public class ProductController {
 
     private final ProductService service;
 
+    // need to get user nae or id from here who create the product
     @PostMapping("/create")
     public ResponseEntity<Integer> createProduct(@RequestBody @Valid ProductRequest request) {
         return ResponseEntity.ok(service.createProduct(request));
