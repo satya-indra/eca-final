@@ -1,11 +1,11 @@
-package com.eca.ecommerce.product;
+package com.eca.ecommerce.controller;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
-public record ProductRequest(
+public record ProductRequest (
 
         Integer id,
         @NotNull(message = "Product name is required")

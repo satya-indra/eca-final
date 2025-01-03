@@ -1,11 +1,11 @@
-package com.eca.ecommerce.product;
+package com.eca.ecommerce.controller;
 
 import com.eca.ecommerce.category.Category;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductMapper {
-    public Product toProduct(ProductRequest request) {
+    public Product toProduct(ProductRequest request, String userId) {
         return Product.builder()
                 .id(request.id())
                 .name(request.name())
@@ -17,6 +17,7 @@ public class ProductMapper {
                                 .id(request.categoryId())
                                 .build()
                 )
+                .userId(userId)
                 .build();
     }
 

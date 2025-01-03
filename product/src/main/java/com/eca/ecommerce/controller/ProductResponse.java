@@ -1,4 +1,4 @@
-package com.eca.ecommerce.product;
+package com.eca.ecommerce.controller;
 
 import java.math.BigDecimal;
 

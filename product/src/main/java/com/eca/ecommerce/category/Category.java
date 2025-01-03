@@ -1,6 +1,6 @@
 package com.eca.ecommerce.category;
 
-import com.eca.ecommerce.product.Product;
+import com.eca.ecommerce.controller.Product;
 import jakarta.persistence.*;
 import lombok.*;
 

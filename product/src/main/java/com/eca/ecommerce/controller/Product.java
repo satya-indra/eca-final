@@ -1,4 +1,4 @@
-package com.eca.ecommerce.product;
+package com.eca.ecommerce.controller;
 
 import com.eca.ecommerce.category.Category;
 import jakarta.persistence.*;
@@ -25,6 +25,6 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
     // we are setting seller here to map each product with its owner
-    private String sellerId;
+    private String userId;
 
 }

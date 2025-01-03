@@ -1,10 +1,14 @@
-package com.eca.ecommerce.product;
+package com.eca.ecommerce.service.impl;
 
+import com.eca.ecommerce.controller.*;
 import com.eca.ecommerce.exception.ProductPurchaseException;
+import com.eca.ecommerce.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
-    final Logger log = LoggerFactory.getLogger(ProductService.class);
+public class ProductServiceImpl implements ProductService {
+    final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
     private final ProductRepository repository;
     private final ProductMapper mapper;
 
-    public Integer createProduct(
-            ProductRequest request
-    ) {
-        var product = mapper.toProduct(request);
+    @Override
+    public Integer createProduct( ProductRequest request, String userId) {
+        // we also expect product images here. But will think of implement it later
+
+        var product = mapper.toProduct(request, userId);
 
         // we also need to map product to given user.
         // we have two options --> get user id/name from json OR extract is from token
@@ -32,6 +37,7 @@ public class ProductService {
         return repository.save(product).getId();
     }
 
+    @Override
     public ProductResponse findById(Integer id) {
 
         ProductResponse pr = repository.findById(id)
@@ -41,14 +47,17 @@ public class ProductService {
         return  pr;
     }
 
-    public List<ProductResponse> findAll() {
+    @Override
+    public Page<ProductResponse> findAll(String category, Pageable pageable) {
         log.info("getting all product result from product service");
-        return repository.findAll()
-                .stream()
-                .map(mapper::toProductResponse)
-                .collect(Collectors.toList());
+        if (category != null) {
+            Page<Product> productPage = repository.findByCategory(category, pageable);
+            return productPage.map(mapper::toProductResponse);
+        }
+        return repository.findAll(pageable).map(mapper::toProductResponse);
     }
 
+    @Override
     @Transactional(rollbackFor = ProductPurchaseException.class)
     public List<ProductPurchaseResponse> purchaseProducts(
             List<ProductPurchaseRequest> request
