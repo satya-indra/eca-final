@@ -1,0 +1,31 @@
+concurrent = 5
+check_interval = 0
+shutdown_timeout = 0
+
+[session_server]
+    session_timeout = 1800
+
+[[runners]]
+    name = "docker-ec2-runner"
+    url = "https://gitlab.com"
+    id = 40975994
+    token = "glrt-3uuCFKtGbwsJusMiBsAS"
+    token_obtained_at = 2024-09-03T05:43:00Z
+    token_expires_at = 0001-01-01T00:00:00Z
+    executor = "docker"
+    [runners.custom_build_dir]
+    [runners.cache]
+      MaxUploadedArchiveSize = 0
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+    [runners.docker]
+      tls_verify = false
+      image = "maven:3.8.3-openjdk-17"
+      privileged = true
+      disable_entrypoint_overwrite = false
+      oom_kill_disable = false
+      disable_cache = false
+      volumes = ["/cache", "/var/run/docker.sock:/var/run/docker.sock"]
+      shm_size = 0
+      network_mtu = 0

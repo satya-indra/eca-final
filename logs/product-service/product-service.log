@@ -1,0 +1,46 @@
+2025-01-03T18:41:26.484+05:30  INFO 24352 --- [product-service] [main] [                                                 ] com.eca.ecommerce.ProductApplication     : Starting ProductApplication using Java 21.0.2 with PID 24352 (D:\eca\eca-project-main\product\target\classes started by T480 in D:\eca\eca-project-main)
+2025-01-03T18:41:26.501+05:30  INFO 24352 --- [product-service] [main] [                                                 ] com.eca.ecommerce.ProductApplication     : No active profile set, falling back to 1 default profile: "default"
+2025-01-03T18:41:26.746+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-01-03T18:41:26.748+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-01-03T18:41:26.748+05:30  WARN 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Could not locate PropertySource ([ConfigServerConfigDataResource@532721fd uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt
+2025-01-03T18:41:26.749+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-01-03T18:41:26.749+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-01-03T18:41:26.749+05:30  WARN 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Could not locate PropertySource ([ConfigServerConfigDataResource@60094a13 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt
+2025-01-03T18:41:26.749+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Fetching config from server at : http://localhost:8888
+2025-01-03T18:41:26.750+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Exception on Url - http://localhost:8888:org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt. Will be trying the next url if available
+2025-01-03T18:41:26.751+05:30  WARN 24352 --- [product-service] [main] [                                                 ] o.s.c.c.c.ConfigServerConfigDataLoader   : Could not locate PropertySource ([ConfigServerConfigDataResource@5aceec94 uris = array<String>['http://localhost:8888'], optional = true, profiles = 'default']): I/O error on GET request for "http://localhost:8888/product-service/default": Connection refused: getsockopt
+2025-01-03T18:41:32.346+05:30  INFO 24352 --- [product-service] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-03T18:41:32.728+05:30  INFO 24352 --- [product-service] [main] [                                                 ] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 361 ms. Found 1 JPA repository interface.
+2025-01-03T18:41:33.320+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.cloud.context.scope.GenericScope     : BeanFactory id=e81a5ae4-dfcf-3b34-9940-372e2e112554
+2025-01-03T18:41:34.299+05:30  WARN 24352 --- [product-service] [main] [                                                 ] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-03T18:41:34.311+05:30  WARN 24352 --- [product-service] [main] [                                                 ] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-03T18:41:35.200+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-01-03T18:41:35.246+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-03T18:41:35.247+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.20]
+2025-01-03T18:41:35.627+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-03T18:41:35.628+05:30  INFO 24352 --- [product-service] [main] [                                                 ] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8871 ms
+2025-01-03T18:41:37.882+05:30  WARN 24352 --- [product-service] [main] [                                                 ] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'flyway' defined in class path resource [org/springframework/boot/autoconfigure/flyway/FlywayAutoConfiguration$FlywayConfiguration.class]: Failed to instantiate [org.flywaydb.core.Flyway]: Factory method 'flyway' threw exception with message: Error creating bean with name 'dataSource' defined in class path resource [org/springframework/boot/autoconfigure/jdbc/DataSourceConfiguration$Hikari.class]: Failed to instantiate [com.zaxxer.hikari.HikariDataSource]: Factory method 'dataSource' threw exception with message: Failed to determine a suitable driver class
+2025-01-03T18:41:38.896+05:30  WARN 24352 --- [product-service] [main] [                                                 ] z.r.AsyncReporter$BoundedAsyncReporter   : Timed out waiting for in-flight spans to send
+2025-01-03T18:41:38.903+05:30  INFO 24352 --- [product-service] [main] [                                                 ] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2025-01-03T18:41:38.950+05:30  INFO 24352 --- [product-service] [main] [                                                 ] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-01-03T18:41:38.988+05:30 ERROR 24352 --- [product-service] [main] [                                                 ] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.
+
+Reason: Failed to determine a suitable driver class
+
+
+Action:
+
+Consider the following:
+	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).
+

@@ -1,0 +1,86 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+default:
+  tags:
+    - ec2-runner
+stages:
+  #- create-image
+  - deploy
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  AWS_ECR_REGISTRY: "241533151025.dkr.ecr.ap-south-1.amazonaws.com"
+  IMAGE_REPO_NAME: "ecr/config-server"
+  AWS_DEFAULT_REGION: "ap-south-1"
+
+    # services:
+    #   - name: docker:18.09-dind
+    #     alias: docker
+
+    # cache:
+    #   paths:
+    #     - .m2/repository/
+
+
+
+
+  # build:
+  #   stage: build
+  #   script:
+  #     - mvn $MAVEN_CLI_OPTS compile
+
+  # test:
+  #   stage: test
+  #   script:
+  #     - mvn $MAVEN_CLI_OPTS test
+
+deploy-to-ecs:
+  stage: deploy
+  script:
+    - chmod +x ./aws-image-deploy.sh
+    - ./aws-image-deploy.sh
+
+# create-image:
+#   stage: create-image
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+
+#   script:
+#     #- aws configure
+#     - aws --version
+#    # - echo $AWS_ECR_ACCESS_KEY_ID
+#    # - echo $AWS_ECR_ACCESS_KEY_ID:$AWS_ECR_SECRET_ACCESS_KEY | docker login -u AWS --password-stdin $AWS_ECR_REGISTRY
+#     - docker login -u AWS -p $(aws ecr get-login-password --region  $AWS_DEFAULT_REGION) $AWS_ECR_REGISTRY
+#     - echo "test"
+#   #  - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin $AWS_ECR_REGISTRY
+#     - echo $AWS_ECR_REGISTRY/$IMAGE_REPO_NAME
+#     - docker build -t $AWS_ECR_REGISTRY/$IMAGE_REPO_NAME:latest .
+#     # Push the Docker image to the correct ECR repository
+#     - docker push $AWS_ECR_REGISTRY/$IMAGE_REPO_NAME:latest
+#     #- docker build -t $IMAGE_TAG .
+#     #- echo $AWS_ECR_ACCESS_KEY_ID:$AWS_ECR_SECRET_ACCESS_KEY | docker login -u AWS --password-stdin $AWS_ECR_REGISTRY
+#    # - docker tag $IMAGE_TAG $AWS_ECR_REGISTRY/$IMAGE_TAG
+#    # - docker push $AWS_ECR_REGISTRY/$IMAGE_TAG:latest
+
+# deploy:
+#   stage: deploy
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+#   script:
+#     - echo "Deploying to ECS..."
+#     - aws ecs update-service --cluster $CLUSTER_NAME --service config-server-service --force-new-deployment

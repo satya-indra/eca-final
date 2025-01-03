@@ -1,0 +1,22 @@
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  application:
+    name: product-service
+
+context:
+       path: product-service
+
+logging:
+  file:
+    name: logs/${spring.application.name}/${spring.application.name}.log
+  level:
+    root: INFO
+  logback:
+    rollingpolicy:
+      max-size: 10MB
+      max-history: 10
+
+
+
+
