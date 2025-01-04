@@ -14,7 +14,9 @@ create table if not exists product
     description        varchar(255),
     name               varchar(255),
     price              numeric(38, 2),
+    user_id            integer,
     category_id        integer
+
         constraint fk1mtsbur82frn64de7balymq9s
             references category
 );

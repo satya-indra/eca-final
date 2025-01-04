@@ -1,5 +1,9 @@
 package com.eca.ecommerce.controller;
 
+import com.eca.ecommerce.dto.request.ProductPurchaseRequest;
+import com.eca.ecommerce.dto.response.ProductPurchaseResponse;
+import com.eca.ecommerce.dto.request.ProductRequest;
+import com.eca.ecommerce.dto.response.ProductResponse;
 import com.eca.ecommerce.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -45,11 +49,11 @@ public class ProductController {
 
     @Cacheable(value = "products", key = "#category + '-' + #page + '-' + #size")
     @GetMapping("/findAll")
-    public ResponseEntity<Page<ProductResponse>> findAll(
+    public Page<ProductResponse> findAll(
             @RequestParam(required = false) String category,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size ) {
         Page<ProductResponse> products = service.findAll(category, PageRequest.of(page, size));
-        return ResponseEntity.ok(products);
+        return products;
     }
 }

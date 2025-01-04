@@ -1,7 +1,13 @@
 package com.eca.ecommerce.service.impl;
 
-import com.eca.ecommerce.controller.*;
+import com.eca.ecommerce.dto.mapper.ProductMapper;
+import com.eca.ecommerce.dto.request.ProductPurchaseRequest;
+import com.eca.ecommerce.dto.request.ProductRequest;
+import com.eca.ecommerce.dto.response.ProductPurchaseResponse;
+import com.eca.ecommerce.dto.response.ProductResponse;
+import com.eca.ecommerce.entity.Product;
 import com.eca.ecommerce.exception.ProductPurchaseException;
+import com.eca.ecommerce.repo.ProductRepository;
 import com.eca.ecommerce.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper mapper;
 
     @Override
-    public Integer createProduct( ProductRequest request, String userId) {
+    public Integer createProduct(ProductRequest request, String userId) {
         // we also expect product images here. But will think of implement it later
 
         var product = mapper.toProduct(request, userId);

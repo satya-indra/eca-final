@@ -1,4 +1,4 @@
-package com.eca.ecommerce.controller;
+package com.eca.ecommerce.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

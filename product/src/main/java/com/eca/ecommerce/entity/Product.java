@@ -1,9 +1,10 @@
-package com.eca.ecommerce.controller;
+package com.eca.ecommerce.entity;
 
 import com.eca.ecommerce.category.Category;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @AllArgsConstructor
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-public class Product {
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue
@@ -25,6 +26,6 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
     // we are setting seller here to map each product with its owner
-    private String userId;
+    private Integer userId;
 
 }

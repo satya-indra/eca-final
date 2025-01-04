@@ -1,6 +1,10 @@
-package com.eca.ecommerce.controller;
+package com.eca.ecommerce.dto.mapper;
 
 import com.eca.ecommerce.category.Category;
+import com.eca.ecommerce.dto.request.ProductRequest;
+import com.eca.ecommerce.dto.response.ProductPurchaseResponse;
+import com.eca.ecommerce.dto.response.ProductResponse;
+import com.eca.ecommerce.entity.Product;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +21,7 @@ public class ProductMapper {
                                 .id(request.categoryId())
                                 .build()
                 )
-                .userId(userId)
+                .userId(Integer.parseInt(userId))
                 .build();
     }
 

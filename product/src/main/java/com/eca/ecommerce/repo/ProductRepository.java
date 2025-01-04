@@ -1,5 +1,6 @@
-package com.eca.ecommerce.controller;
+package com.eca.ecommerce.repo;
 
+import com.eca.ecommerce.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

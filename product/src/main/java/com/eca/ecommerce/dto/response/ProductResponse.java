@@ -1,5 +1,6 @@
-package com.eca.ecommerce.controller;
+package com.eca.ecommerce.dto.response;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 public record ProductResponse(
@@ -11,5 +12,5 @@ public record ProductResponse(
         Integer categoryId,
         String categoryName,
         String categoryDescription
-) {
+) implements Serializable {
 }

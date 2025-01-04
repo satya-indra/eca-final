@@ -1,9 +1,9 @@
 package com.eca.ecommerce.service;
 
-import com.eca.ecommerce.controller.ProductPurchaseRequest;
-import com.eca.ecommerce.controller.ProductPurchaseResponse;
-import com.eca.ecommerce.controller.ProductRequest;
-import com.eca.ecommerce.controller.ProductResponse;
+import com.eca.ecommerce.dto.request.ProductPurchaseRequest;
+import com.eca.ecommerce.dto.response.ProductPurchaseResponse;
+import com.eca.ecommerce.dto.request.ProductRequest;
+import com.eca.ecommerce.dto.response.ProductResponse;
 import com.eca.ecommerce.exception.ProductPurchaseException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
