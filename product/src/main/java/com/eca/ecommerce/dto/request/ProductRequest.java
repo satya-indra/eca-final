@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-
 public record ProductRequest (
 
         Integer id,
@@ -17,6 +16,8 @@ public record ProductRequest (
         @Positive(message = "Price should be positive")
         BigDecimal price,
         @NotNull(message = "Product category is required")
-        Integer categoryId
-) {
+        Integer categoryId,
+        int i) {
+
+
 }
