@@ -7,6 +7,11 @@ import com.eca.ecommerce.dto.response.ProductResponse;
 import com.eca.ecommerce.entity.Product;
 import org.springframework.stereotype.Service;
 
+/**
+ * https://java-design-patterns.com/patterns/data-mapper/
+ * The Builder Pattern in your Product POJO is a Creational Pattern.
+ * The Data Mapper functionality of your mapper aligns most closely with Behavioral Patterns due to its role in coordinating data transformation behavior.
+ */
 @Service
 public class ProductMapper {
     public Product toProduct(ProductRequest request, String userId) {
