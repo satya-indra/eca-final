@@ -70,6 +70,7 @@ services:
       - "22181:2181"
     networks:
       - microservices-net
+
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: ms_kafka
@@ -93,6 +94,7 @@ services:
     ports:
       - 1080:1080
       - 1025:1025
+
   keycloak_web:
     image: quay.io/keycloak/keycloak:23.0.7
     container_name: keycloak_web
@@ -113,12 +115,12 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev
-#    depends_on:
-#      - keycloakdb
+    #    depends_on:
+    #      - keycloakdb
     ports:
       - 8080:8080
     networks:
-          - microservices-net
+      - microservices-net
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
@@ -155,6 +157,7 @@ services:
       - microservices-net
     depends_on:
       - elasticsearch
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -166,6 +169,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - microservices-net
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -177,6 +181,41 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
       - microservices-net
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - microservices-net
+
+  redis-insight:
+    image: redis/redisinsight
+    container_name: redis-insight-container
+    ports:
+      - "5540:5540"
+    networks:
+      - microservices-net
+    depends_on:
+      - redis
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://host.docker.internal:5432/sonarqube
+      SONAR_JDBC_USERNAME: eca
+      SONAR_JDBC_PASSWORD: eca
+#    depends_on:
+#      - ms_pg_sql
+    networks:
+      - microservices-net
+
 networks:
   microservices-net:
     driver: bridge
@@ -186,3 +225,4 @@ volumes:
   pgadmin:
   mongo:
   grafana-data:
+  redis_data:

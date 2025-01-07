@@ -3,6 +3,11 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: product-service
+  redis:
+    host: host.docker.internal
+    port: 6379
+    password: # Leave blank if no password is set
+    timeout: 6000
 
 context:
        path: product-service
