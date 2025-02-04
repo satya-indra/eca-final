@@ -18,7 +18,7 @@ FROM amazoncorretto:17
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/payment-0.0.1-SNAPSHOT.jar /app/payment.jar
+COPY --from=builder  /app/target/payment-0.0.1-SNAPSHOT.jar /app/payment.jar
 
 # Expose the port your Spring Boot application will run on (default 8060)
 EXPOSE 8060
