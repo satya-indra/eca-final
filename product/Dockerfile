@@ -18,7 +18,7 @@ FROM amazoncorretto:17
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/product.-0.0.1-SNAPSHOT.jar /app/product.jar
+COPY target/product-0.0.1-SNAPSHOT.jar /app/product.jar
 
 # Expose the port your Spring Boot application will run on (default 8050)
 EXPOSE 8050
