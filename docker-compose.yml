@@ -197,7 +197,6 @@ services:
     depends_on:
       - postgresql
       - mongodb
-      - kafka
 
   # Step 2: Discovery Server (Eureka)
   discovery:
