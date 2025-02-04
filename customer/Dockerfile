@@ -11,14 +11,14 @@ COPY src ./src
 # Run Maven build to create the JAR
 RUN mvn clean package -DskipTests
 
-# Use the official OpenJDK base image
+# Stage 2: Create the final runtime image
 FROM amazoncorretto:17
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the JAR file into the container
-COPY target/customer-0.0.1-SNAPSHOT.jar /app/customer.jar
+# Copy the JAR file from the builder stage
+COPY --from=builder /app/target/customer-0.0.1-SNAPSHOT.jar /app/customer.jar
 
 # Expose the port your Spring Boot application will run on (default 8090)
 EXPOSE 8090

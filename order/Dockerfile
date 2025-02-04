@@ -18,7 +18,7 @@ FROM amazoncorretto:17
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/order.jar /app/order.jar
+COPY target/order-0.0.1-SNAPSHOT.jar /app/order.jar
 
 # Expose the port your Spring Boot application will run on (default 8070)
 EXPOSE 8070

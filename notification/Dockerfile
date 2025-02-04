@@ -11,14 +11,14 @@ COPY src ./src
 # Run Maven build to create the JAR
 RUN mvn clean package -DskipTests
 
-# Use the official OpenJDK base image
+# Stage 2: Run the Application
 FROM amazoncorretto:17
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the JAR file into the container
-COPY target/notification.jar /app/notification.jar
+# Copy the built JAR from the previous stage
+COPY --from=builder /app/target/notification-0.0.1-SNAPSHOT.jar /app/notification.jar
 
 # Expose the port your Spring Boot application will run on (default 8040)
 EXPOSE 8040
