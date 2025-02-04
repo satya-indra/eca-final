@@ -2,8 +2,8 @@ package com.eca.ecommerce.order;
 
 import com.eca.ecommerce.customer.CustomerClient;
 import com.eca.ecommerce.exception.BusinessException;
-import com.eca.ecommerce.kafka.OrderConfirmation;
-import com.eca.ecommerce.kafka.OrderProducer;
+import com.eca.ecommerce.kafka.EventProducer;
+import com.eca.ecommerce.kafka.OrderConfirmationMessage;
 import com.eca.ecommerce.orderline.OrderLineRequest;
 import com.eca.ecommerce.orderline.OrderLineService;
 import com.eca.ecommerce.payment.PaymentClient;
@@ -34,7 +34,7 @@ public class OrderService {
     private final PaymentClient paymentClient;
     private final ProductClient productClient;
     private final OrderLineService orderLineService;
-    private final OrderProducer orderProducer;
+    private final EventProducer eventProducer;
 
     @Transactional
     public Integer createOrder(OrderRequest orderRequest) {
@@ -45,13 +45,26 @@ public class OrderService {
                 // Step 1 : customerClient.findCustomerById(request.customerId()) --> returns CustomerResponse
                 .thenApplyAsync(this::findCustomer)
                 // Step 2 : productClient.purchaseProducts(request.products()) --> returns List<PurchaseResponse>
-                .thenApplyAsync(this::makePurchaseRequest)
+                .thenApplyAsync(this::getProductsIfInventoryAvailable)
+                .exceptionally((ex) -> {
+                    throw new BusinessException("Ordered inventory not available");
+                })
                 // Step 3 : OrderRepository repository.save the order --> returns order
                 .thenApplyAsync((context -> saveOrder(context.getOrderRequest(), context)))
                 // step 4 : save order line request for each purchased products
                 .thenApplyAsync((this::saveOrderLines))
                 // step 5 : paymentClient.requestOrderPayment(paymentRequest)
                 .thenApplyAsync((this::makePayment))
+                .whenComplete((result, exception) -> {
+                    if (exception != null) {
+                        // Log or handle the exception
+                        log.error("Exception occurred: {}", exception.getMessage(), exception);
+                        rollBackInventory(result); // Perform rollback in case of failure
+                        throw new BusinessException("Order creation failed. Inventory rollback initiated");
+                    }
+                    // Perform cleanup or final operations
+                    log.info("Payment success.");
+                })
                 // step 6 : send order confirmation by messaging service
                 .thenApplyAsync(this::sendOrderNotification)
                 // step 7 : return order id integer
@@ -66,19 +79,23 @@ public class OrderService {
 
     }
 
+    private void rollBackInventory(OrderContext context) {
+        eventProducer.sendInventoryRollbackEvent(context.getPurchasedProducts());
+    }
+
     private static OrderContext getContext(OrderRequest orderRequest) {
         return OrderContext.builder().orderRequest(orderRequest).build();
     }
 
     private OrderContext sendOrderNotification(OrderContext context) {
-        orderProducer.sendOrderConfirmation(
-                new OrderConfirmation(
-                        context.getOrderRequest().reference(),
-                        context.getOrderRequest().amount(),
-                        context.getOrderRequest().paymentMethod(),
-                        context.getCustomerResponse(),
-                        context.getPurchasedProducts()
-                ));
+        eventProducer.sendOrderConfirmation(
+                OrderConfirmationMessage.builder()
+                        .orderReference(context.getOrderRequest().reference())
+                        .totalAmount(context.getOrderRequest().amount())
+                        .paymentMethod(context.getOrderRequest().paymentMethod())
+                        .customer(context.getCustomerResponse())
+                        .products(context.getPurchasedProducts())
+                        .build());
         return context;
     }
 
@@ -126,7 +143,7 @@ public class OrderService {
                 .build();
     }
 
-    private OrderContext makePurchaseRequest(OrderContext context) {
+    private OrderContext getProductsIfInventoryAvailable(OrderContext context) {
         var purchasedProducts = productClient.purchaseProducts(context.getOrderRequest().products());
         return OrderContext.builder()
                 .orderRequest(context.getOrderRequest())

@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   postgresql:
     container_name: ms_pg_sql
@@ -29,19 +31,19 @@ services:
       - microservices-net
     restart: unless-stopped
 
-  zipkin:
-    container_name: zipkin
-    image: openzipkin/zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - microservices-net
+#  zipkin:
+#    container_name: zipkin
+#    image: openzipkin/zipkin
+#    ports:
+#      - "9411:9411"
+#    networks:
+#      - microservices-net
 
   mongodb:
     image: mongo
     container_name: mongo_db
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
       - mongo:/data
     environment:
@@ -53,57 +55,59 @@ services:
     container_name: mongo_express
     restart: always
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=eca
       - ME_CONFIG_MONGODB_ADMINPASSWORD=eca
       - ME_CONFIG_MONGODB_SERVER=mongodb
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_SERVER_ID: 1
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "22181:2181"
-    networks:
-      - microservices-net
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: ms_kafka
-    ports:
-      - "9092:9092"
-    depends_on:
-      - zookeeper
-    environment:
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-    networks:
-      - microservices-net
+#  zookeeper:
+#    image: confluentinc/cp-zookeeper:latest
+#    container_name: zookeeper
+#    environment:
+#      ZOOKEEPER_SERVER_ID: 1
+#      ZOOKEEPER_CLIENT_PORT: 2181
+#      ZOOKEEPER_TICK_TIME: 2000
+#    ports:
+#      - "22181:2181"
+#    networks:
+#      - microservices-net
+#
+#  kafka:
+#    image: confluentinc/cp-kafka:latest
+#    container_name: ms_kafka
+#    ports:
+#      - "9092:9092"
+#    depends_on:
+#      - zookeeper
+#    environment:
+#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+#    networks:
+#      - microservices-net
+#
+#  mail-dev:
+#    container_name: ms-mail-dev
+#    image: maildev/maildev
+#    ports:
+#      - "1080:1080"
+#      - "1025:1025"
 
-  mail-dev:
-    container_name: ms-mail-dev
-    image: maildev/maildev
-    ports:
-      - 1080:1080
-      - 1025:1025
   keycloak_web:
     image: quay.io/keycloak/keycloak:23.0.7
     container_name: keycloak_web
     environment:
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://host.docker.internal:5432/keycloak
+      KC_DB_URL: jdbc:postgresql://postgresql:5432/keycloak
       KC_DB_USERNAME: eca
       KC_DB_PASSWORD: eca
 
       KC_HOSTNAME: localhost
-      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_PORT: 8085
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_HTTPS: false
 
@@ -113,72 +117,168 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev
+    ports:
+      - "8085:8085"
+    networks:
+      - microservices-net
+    depends_on:
+      - postgresql
+
+#  elasticsearch:
+#    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
+#    container_name: elasticsearch
+#    environment:
+#      - xpack.security.enabled=false
+#      - discovery.type=single-node
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    networks:
+#      - microservices-net
+
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:8.15.1
+#    container_name: kibana
+#    ports:
+#      - "5601:5601"
+#    networks:
+#      - microservices-net
 #    depends_on:
-#      - keycloakdb
+#      - elasticsearch
+
+#  logstash:
+#    image: docker.elastic.co/logstash/logstash:8.15.1
+#    container_name: logstash
+#    volumes:
+#      - /home/ubuntu/eca/install/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+#      - /home/ubuntu/eca/install/logs/product-service:/logs/product-service
+#      - /home/ubuntu/eca/install/logs/gateway-service:/logs/gateway-service
+#    ports:
+#      - "5044:5044"
+#    networks:
+#      - microservices-net
+#    depends_on:
+#      - elasticsearch
+#
+#  prometheus:
+#    image: prom/prometheus:latest
+#    container_name: prometheus
+#    volumes:
+#      - /home/ubuntu/eca/install/prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - "9090:9090"
+#    command:
+#      - '--config.file=/etc/prometheus/prometheus.yml'
+#    networks:
+#      - microservices-net
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - grafana-data:/var/lib/grafana
+#    environment:
+#      - GF_SECURITY_ADMIN_PASSWORD=admin
+#    networks:
+#      - microservices-net
+
+
+  # Step 1: Config Server
+  config-server:
+    build:
+      context: ./config-server
+    container_name: ms_config_server
     ports:
-      - 8080:8080
-    networks:
-          - microservices-net
-
-
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.1
-    container_name: elasticsearch
-    environment:
-      - xpack.security.enabled=false
-      - discovery.type=single-node
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - microservices-net
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.15.1
-    container_name: kibana
-    ports:
-      - 5601:5601
+      - "8888:8888"
     networks:
       - microservices-net
     depends_on:
-      - elasticsearch
+      - postgresql
+      - mongodb
+      - kafka
 
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.15.1
-    container_name: logstash
-    volumes:
-      - D:/ECA-Project/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - D:/ECA-Project/logs/product-service:/logs/product-service
-      - D:/ECA-Project/logs/gateway-service:/logs/gateway-service
+  # Step 2: Discovery Server (Eureka)
+  discovery:
+    build:
+      context: ./discovery
+    container_name: ms_discovery
     ports:
-      - 5044:5044
+      - "8761:8761"
     networks:
       - microservices-net
     depends_on:
-      - elasticsearch
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    volumes:
-      -  D:/ECA-Project/prometheus.yml:/etc/prometheus/prometheus.yml
+      - config-server
+
+  # Step 3: Business Microservices
+  customer:
+    build:
+      context: ./customer
+    container_name: ms_customer
     ports:
-      - "9090:9090"
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - "8091:8091"
     networks:
       - microservices-net
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
+    depends_on:
+      - discovery
+
+  gateway:
+    build:
+      context: ./gateway
+    container_name: ms_gateway
     ports:
-      - "3000:3000"
-    volumes:
-      - grafana-data:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - "8080:8080"
     networks:
       - microservices-net
+    depends_on:
+      - discovery
+
+  order:
+    build:
+      context: ./order
+    container_name: ms_order
+    ports:
+      - "8092:8092"
+    networks:
+      - microservices-net
+    depends_on:
+      - discovery
+
+  payment:
+    build:
+      context: ./payment
+    container_name: ms_payment
+    ports:
+      - "8093:8093"
+    networks:
+      - microservices-net
+    depends_on:
+      - discovery
+
+  product:
+    build:
+      context: ./product
+    container_name: ms_product
+    ports:
+      - "8094:8094"
+    networks:
+      - microservices-net
+    depends_on:
+      - discovery
+
+  notification:
+    build:
+      context: ./notification
+    container_name: ms_notification
+    ports:
+      - "8095:8095"
+    networks:
+      - microservices-net
+    depends_on:
+      - discovery
+
+
 networks:
   microservices-net:
     driver: bridge

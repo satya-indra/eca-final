@@ -56,4 +56,7 @@ public class ProductController {
         Page<ProductResponse> products = service.findAll(category, PageRequest.of(page, size));
         return products;
     }
+
+
+    // saga pattern
 }
